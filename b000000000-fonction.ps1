@@ -1,31 +1,41 @@
-<#
-.SYNOPSIS
-    Ce script est un laboratoire Powershell
 
-.DESCRIPTION
-    Ce script est utilisé pour le laboratoire de programmation en Powershell.
-
-.NOTES
-    Author: CollegeBoreal
-    Derniere mise à jour: yyyy-mm-dd
-
-#>
 
 # Definition de la fonction
-  function Stagiaire { 
+  function Stagiaire {
+
+   <#
+   .SYNOPSIS
+    Ce script est un laboratoire Powershell
+
+   .DESCRIPTION
+    Ce script est utilisé pour le laboratoire de programmation en Powershell.
+
+    .NOTES
+    Author: Olaitan
+    Derniere mise à jour: 2020-04-02
+
+     .Exemple
+     Stagiaire -Compte "Ador"
+
+      .Link
+      https://github.com/ordenrosae
+      #> 
+      
       [CmdletBinding()]
       param (
-         [String]$personneNom,
-         [Int]$personneAge
-      )
-  # message de bienvenue 
-    BEGIN {Write-Verbose "Début du script"}
-    PROCESS { "Bonjour {0} ! Tu as {1} ans." -F $personneNom, $personneAge }
-    END {Write-Verbose "Fin du script"}
-   
+         [Parameter(Mandatory=$true)]
+         [Alias("Compte")]
+         [String]$personneNom
+         )
+      
+      # Text d'existence du compte dans Active directory
+      Try {$existAD = (Get-ADUser $personneNom)}
+      catch {$existAD = $false}
+    
+      # Affichage du message d'existence ou de création du compte
+      if ($existAD) {"le compte su stagiaire {0} existe dans Active Directory." -F $personneNom}
+      else {"vous devez créer le compte de {0} dans Active Directory." -F $personneNom}
    }
  
-# Appel de la fonction
-Stagiaire Toronto 35
-Stagiaire "Pascal Siakam" 26  -verbose
+  Get-Help Stagiaire
 
